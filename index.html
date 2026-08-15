@@ -145,6 +145,12 @@
     }
     .topnav nav a:hover { color: var(--fg); }
     @media (max-width: 760px) { .topnav nav { display: none; } }
+    .topnav-actions { display: flex; gap: 10px; }
+    @media (max-width: 480px) { .topnav-actions .btn { padding: 10px 14px; font-size: 14px; } }
+    /* 中等螢幕文字欄變窄時縮小按鈕，維持兩顆 hero CTA 同一排 */
+    @media (min-width: 921px) and (max-width: 1200px) {
+      .hero-cta .btn-lg { padding: 14px 22px; font-size: 15px; }
+    }
 
     /* ─── buttons ─────────────────────────────────────────────────── */
     .btn {
@@ -505,7 +511,10 @@
       <a href="#instructor">關於講師</a>
       <a href="#info">課程資訊</a>
     </nav>
-    <a href="#signup" class="btn btn-primary js-cta" data-loc="nav">免費報名</a>
+    <div class="topnav-actions">
+      <a href="https://lin.ee/so9UxeZ" target="_blank" rel="noopener" class="btn btn-ghost js-quote-cta" data-loc="nav_quote">我要報價</a>
+      <a href="#signup" class="btn btn-primary js-cta" data-loc="nav">免費報名</a>
+    </div>
   </div>
 </header>
 
@@ -520,6 +529,7 @@
         <p class="lead">拆解 B2B 工廠官網從「被找到」到「主動聯絡」的五個關鍵。</p>
         <div class="hero-cta">
           <a href="#signup" class="btn btn-primary btn-lg js-cta" data-loc="hero">免費報名｜找出官網下一步</a>
+          <a href="https://lin.ee/so9UxeZ" target="_blank" rel="noopener" class="btn btn-ghost btn-lg js-quote-cta" data-loc="hero_quote">我要報價</a>
         </div>
       </div>
       <div class="hero-visual">
@@ -828,6 +838,19 @@
       if (typeof gtag === 'function') {
         gtag('event', 'cta_click', {
           button_location: el.dataset.loc || 'unknown',
+          ...utmParams
+        });
+      }
+    });
+  });
+
+  // 「我要報價」→ 開 LINE@，GA4 event: quote_click（詢價意圖，與課程報名分流）
+  document.querySelectorAll('.js-quote-cta').forEach(el => {
+    el.addEventListener('click', () => {
+      if (typeof gtag === 'function') {
+        gtag('event', 'quote_click', {
+          button_location: el.dataset.loc || 'unknown',
+          link_url: el.href,
           ...utmParams
         });
       }
